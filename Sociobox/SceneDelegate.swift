@@ -38,7 +38,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     
-    let provider = ProfileContentProviderView(privacyLevel: .friend, user: Mock.user())
+    let provider = ProfileContentProvider(privacyLevel: PrivacyLevel.friend, user: Mock.user())
+    let container = DIContainer.shared
+    container.register(type: PrivacyLevel.self, component: PrivacyLevel.friend)
+    container.register(type: User.self, component: Mock.user())
+    container.register(type: ProfileContentProviderProtocol.self, component: ProfileContentProvider())
+    
     let profileView = ProfileView(
       provider: provider,
       user: Mock.user()

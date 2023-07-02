@@ -30,52 +30,27 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-protocol ProfileContentProviderProtocol {
-  var privacyLevel: PrivacyLevel { get }
-  var canSendMessage: Bool { get }
-  var canStartVideoChat: Bool { get }
-  var photosView: AnyView { get }
-  var feedView: AnyView { get }
-  var friendsView: AnyView { get }
+protocol DIContainerProtocol {
+  func register<Component>(type: Component.Type, component: Any)
+  func resolve<Component>(type: Component.Type) -> Component?
 }
 
-final class ProfileContentProvider: ProfileContentProviderProtocol {
-  let privacyLevel: PrivacyLevel
-  private let user: User
+final class DIContainer: DIContainerProtocol {
+  static let shared = DIContainer()
   
-  init(
-    privacyLevel: PrivacyLevel = DIContainer.shared.resolve(type: PrivacyLevel.self)!,
-    user: User = DIContainer.shared.resolve(type: User.self)!) {
-  
-    self.privacyLevel = privacyLevel
-    self.user = user
+  private init() {
+    
   }
   
-  var canSendMessage: Bool {
-    privacyLevel > .everyone
+  var components: [String: Any] = [:]
+  
+  func register<Component>(type: Component.Type, component: Any) {
+    components["\(type)"] = component
   }
   
-  var canStartVideoChat: Bool {
-    privacyLevel > .everyone
-  }
-  
-  var photosView: AnyView {
-    privacyLevel > .everyone ?
-      AnyView(PhotosView(photos: user.photos)) :
-      AnyView(EmptyView())
-  }
-  
-  var feedView: AnyView {
-    privacyLevel > .everyone ?
-      AnyView(HistoryFeedView(posts: user.historyFeed)) :
-      AnyView(RestrictedAccessView())
-  }
-  
-  var friendsView: AnyView {
-    privacyLevel > .everyone ?
-      AnyView(UsersView(title: "Friends", users: user.friends)) :
-      AnyView(EmptyView())
+  func resolve<Component>(type: Component.Type) -> Component? {
+    return components["\(type)"] as? Component
   }
 }

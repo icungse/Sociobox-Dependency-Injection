@@ -43,19 +43,19 @@ struct UserPreferencesView<Store>: View where Store: PreferencesStoreProtocol {
   var body: some View {
     NavigationView {
       VStack {
-        PreferenceView(title: .photos, value: .friend) { value in
+        PreferenceView(title: .photos, value: store.photosPreference) { value in
           store.photosPreference = value
         }
-        PreferenceView(title: .friends, value: .friend) { value in
+        PreferenceView(title: .friends, value: store.friendsListPreference) { value in
           store.friendsListPreference = value
         }
-        PreferenceView(title: .feed, value: .friend) { value in
+        PreferenceView(title: .feed, value: store.feedPreference) { value in
           store.feedPreference = value
         }
-        PreferenceView(title: .videoCall, value: .friend) { value in
+        PreferenceView(title: .videoCall, value: store.videoCallsPreference) { value in
           store.videoCallsPreference = value
         }
-        PreferenceView(title: .message, value: .friend) { value in
+        PreferenceView(title: .message, value: store.messagePreference) { value in
           store.messagePreference = value
         }
         Spacer()

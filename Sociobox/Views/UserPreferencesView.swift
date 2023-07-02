@@ -33,19 +33,30 @@
 import SwiftUI
 import Combine
 
-struct UserPreferencesView: View {
+struct UserPreferencesView<Store>: View where Store: PreferencesStoreProtocol {
+  private var store: Store
+  
+  init(store: Store = DIContainer.shared.resolve(type: Store.self)!) {
+    self.store = store
+  }
+  
   var body: some View {
     NavigationView {
       VStack {
-        PreferenceView(title: .photos, value: .friend) { _ in
+        PreferenceView(title: .photos, value: .friend) { value in
+          store.photosPreference = value
         }
-        PreferenceView(title: .friends, value: .friend) { _ in
+        PreferenceView(title: .friends, value: .friend) { value in
+          store.friendsListPreference = value
         }
-        PreferenceView(title: .feed, value: .friend) { _ in
+        PreferenceView(title: .feed, value: .friend) { value in
+          store.feedPreference = value
         }
-        PreferenceView(title: .videoCall, value: .friend) { _ in
+        PreferenceView(title: .videoCall, value: .friend) { value in
+          store.videoCallsPreference = value
         }
-        PreferenceView(title: .message, value: .friend) { _ in
+        PreferenceView(title: .message, value: .friend) { value in
+          store.messagePreference = value
         }
         Spacer()
       }
@@ -102,6 +113,6 @@ struct PreferenceMenu: View {
 
 struct UserPreferencesView_Previews: PreviewProvider {
   static var previews: some View {
-    UserPreferencesView()
+    UserPreferencesView(store: PreferencesStore())
   }
 }

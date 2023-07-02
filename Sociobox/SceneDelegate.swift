@@ -43,6 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     container.register(type: PrivacyLevel.self, component: PrivacyLevel.friend)
     container.register(type: User.self, component: Mock.user())
     container.register(type: ProfileContentProviderProtocol.self, component: ProfileContentProvider())
+    container.register(type: PreferencesStore.self, component: PreferencesStore())
     
     let profileView = ProfileView(
       provider: provider,
